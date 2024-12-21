@@ -60,7 +60,7 @@ project-root/
 ├── data/             # Folder for GeoJSON files
 │   ├── schools.geojson
 │   └── pokie_funds.geojson
-└── README.md         # Project documentation
+└── README.md         # Project documentation 
 
 Usage
 
