@@ -1,0 +1,115 @@
+{
+    "type": "FeatureCollection",
+    "features": [
+   {
+     "type": "Feature",
+     "geometry": {
+        "type": "Point",
+        "coordinates":  [ 171.758417,-43.896753 ]
+     },
+     "properties": {
+     "Fund Name":"The Fat Duck Ashburton",
+     "Address":"360 WEST STREET, ASHBURTON, CANTERBURY"
+     }
+   },
+   {
+     "type": "Feature",
+     "geometry": {
+        "type": "Point",
+        "coordinates":  [ 145.333292,-38.119945 ]
+     },
+     "properties": {
+     "Fund Name":"123 KARAOKE BAR",
+     "Address":"1/16 GOOCH PLACE, HOWICK, MANUKAU"
+     }
+   },
+   {
+     "type": "Feature",
+     "geometry": {
+        "type": "Point",
+        "coordinates":  [ 174.903985,-36.898646 ]
+     },
+     "properties": {
+     "Fund Name":"123 PALM BAR",
+     "Address":"495 PAKURANGA ROAD, HALF MOON BAY, MANUKAU"
+     }
+   },
+   {
+     "type": "Feature",
+     "geometry": {
+        "type": "Point",
+        "coordinates":  [ 174.859808,-36.968412 ]
+     },
+     "properties": {
+     "Fund Name":"The WeighBridge",
+     "Address":"132 GREAT SOUTH ROAD, PAPATOETOE, AUCKLAND"
+     }
+   },
+   {
+     "type": "Feature",
+     "geometry": {
+        "type": "Point",
+        "coordinates":  [ 176.586608,-39.94447 ]
+     },
+     "properties": {
+     "Fund Name":"PJ'S BAR",
+     "Address":"2 HIGH STREET, WAIPAWA, HAWKES BAY"
+     }
+   },
+   {
+     "type": "Feature",
+     "geometry": {
+        "type": "Point",
+        "coordinates":  [ 176.586608,-39.94447 ]
+     },
+     "properties": {
+     "Fund Name":"BILLS BAR & BISTRO",
+     "Address":"1 HALSWELL ROAD, HOON HAY, CHRISTCHURCH"
+     }
+   },
+   {
+     "type": "Feature",
+     "geometry": {
+        "type": "Point",
+        "coordinates":  [ 172.5751232,-43.5315386 ]
+     },
+     "properties": {
+     "Fund Name":"BUSH INN TAVERN",
+     "Address":"364 RICCARTON ROAD, UPPER RICCARTON, CHRISTCHURCH"
+     }
+   },
+   {
+     "type": "Feature",
+     "geometry": {
+        "type": "Point",
+        "coordinates":  [ 174.7763665,-36.8676972 ]
+     },
+     "properties": {
+     "Fund Name":"Bar Kiwi",
+     "Address":"2 York Street,Level 6,NEWMARKET, AUCKLAND"
+     }
+   },
+   {
+     "type": "Feature",
+     "geometry": {
+        "type": "Point",
+        "coordinates":  [ 174.763441,-36.8465418 ]
+     },
+     "properties": {
+     "Fund Name":"Muddy Farmer",
+     "Address":"13 WYNDHAM STREET, AUCKLAND CENTRAL, AUCKLAND"
+     }
+   },
+   {
+     "type": "Feature",
+     "geometry": {
+        "type": "Point",
+        "coordinates":  [ 174.7606163,-36.8639153 ]
+     },
+     "properties": {
+     "Fund Name":"EDINBURGH CASTLE",
+     "Address":"215 SYMONDS STREET, EDEN TERRACE, AUCKLAND"
+     }
+   }
+ ]
+ }
