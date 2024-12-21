@@ -53,14 +53,14 @@ mapboxgl.accessToken = 'your-access-token';
 Project Structure
 
 project-root/
-├── index.html        # Main HTML file
-├── style.css         # Stylesheet
-├── app.js            # Main JavaScript logic
-├── scroll-jump.js    # Script for jump scrolling
-├── data/             # Folder for GeoJSON files
-│   ├── schools.geojson
-│   └── pokie_funds.geojson
-└── README.md         # Project documentation 
+-- index.html        # Main HTML file
+-- style.css         # Stylesheet
+-- app.js            # Main JavaScript logic
+-- scroll-jump.js    # Script for jump scrolling
+-- data/             # Folder for GeoJSON files
+---- schools.geojson
+---- pokie_funds.geojson
+-- README.md         # Project documentation 
 
 Usage
 
