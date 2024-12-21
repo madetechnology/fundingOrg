@@ -1,16 +1,105 @@
-body {
+/* Existing styles */
+html, body {
     margin: 0;
     padding: 0;
+    height: 100%;
     font-family: Arial, sans-serif;
+    font-size: 20px;
 }
 
-.mapbox {
-    padding: 8px;
+/* Menu bar styles */
+#menu-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: rgba(51, 51, 51, 0.5);
+    z-index: 10000; /* Ensure it stays on top */
+    color: white;
+    padding: 10px 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    overflow-x: hidden; /* Prevent horizontal overflow */
 }
 
+#menu-bar nav {
+    display: flex;
+    width: 98%;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#logo {
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+}
+
+#menu-bar nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 20px; /* Spacing between menu items */
+    overflow-x: auto; /* Allow scrolling if content exceeds width */
+    white-space: nowrap; /* Prevent items from wrapping to a new line */
+}
+
+
+#menu-bar nav ul li {
+    display: inline;
+    flex-shrink: 0; /* Prevent items from shrinking */
+}
+
+#menu-bar nav ul li a {
+    text-decoration: none;
+    color: white;
+    font-size: 16px;
+    padding: 8px 12px;
+    transition: background 0.3s, color 0.3s;
+}
+
+#menu-bar nav ul li a:hover {
+    background: #555;
+    color: #fff;
+    border-radius: 4px;
+}
+
+/* First section styles */
+#first-section {
+    height: 100vh; /* Full height of the viewport */
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-top: 50px; /* Ensure no overlap with menu bar */
+    background: rgba(0, 123, 255, 0.8); /* Near-black with 80% opacity */
+    color: #ffffff; /* Ensures text is visible */
+}
+
+#map-container {
+    flex-grow: 1; /* Makes the map container take up the remaining height */
+    width: 100%; /* Full width of the parent */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#map {
+    width: 80%; /* Adjust width as needed */
+    height: 80%; /* Adjust height as needed */
+    border-top-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+    box-shadow: 0 0px 20px rgba(255, 255, 255, 0.5); /* Adds a shadow around the map */
+}
+
+/* Search container */
 #search-container {
     position: absolute;
-    top: 20px; 
+    top: 100px;
     left: 50%;
     transform: translateX(-50%);
     z-index: 1;
@@ -41,19 +130,24 @@ body {
     background-color: #0056b3;
 }
 
-#map {
-    position: absolute;
-    top: 100px;
-    bottom: 10px;
-    left: 10px;
-    right: 10px;
+/* Second section */
+#second-section {
+    height: 100vh; /* Full height of the viewport */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #f4f4f4;
+    text-align: center;
+    padding: 20px; /* Ensure spacing for content */
 }
 
+/* Fixed buttons */
 .featurebase {
     font-family: "system-ui", sans-serif;
     position: fixed;
     bottom: 0px;
-    right: 0px;
+    right: 0px; /* Position it to the right */
     padding: 10px 15px;
     font-size: 16px;
     font-weight: bold;
@@ -61,8 +155,8 @@ body {
     color: #fff;
     text-decoration: none;
     z-index: 1000;
-    border-top-left-radius: 12px;
-    border-bottom-left-radius: 12px;
+    border-top-left-radius: 12px; /* Round the top-left corner */
+    border-bottom-right-radius: 12px; /* Round the bottom-right corner */
     transition: background 0.3s, transform 0.3s;
 }
 
@@ -75,7 +169,7 @@ body {
     font-family: "system-ui", sans-serif;
     position: fixed;
     bottom: 0px;
-    left: 0px;
+    left: 0px; /* Position it to the left */
     padding: 10px 15px;
     font-size: 16px;
     font-weight: bold;
@@ -83,8 +177,8 @@ body {
     color: #fff;
     text-decoration: none;
     z-index: 1000;
-    border-top-right-radius: 12px;
-    border-bottom-right-radius: 12px;
+    border-top-right-radius: 12px; /* Round the top-right corner */
+    border-bottom-left-radius: 12px; /* Round the bottom-left corner */
     transition: background 0.3s, transform 0.3s;
 }
 
@@ -94,12 +188,24 @@ body {
 }
 
 /* Responsive Design */
-@media (max-width: 600px) {
+@media (max-width: 800px) {
+    #menu-bar nav ul {
+        flex-direction: row; /* Keep menu items inline */
+        justify-content: flex-end; /* Align items to the right */
+        gap: 10px; /* Adjust spacing for smaller screens */
+        overflow-x: auto; /* Allow horizontal scrolling if content overflows */
+    }
+
+    #menu-bar nav ul li a {
+        font-size: 16px; /* Adjust font size for smaller screens */
+        padding: 6px 10px;
+    }
+
     #search-container {
         width: 90%;
         left: 5%;
         transform: none;
-        top: 20px;
+        top: 100px;
     }
 
     #search-bar {
@@ -111,10 +217,53 @@ body {
     }
 
     #map {
-        top: 120px;
-        bottom: 120px;
-        left: 10px;
-        right: 10px;
+        width: 90%; /* Adjust map width for smaller screens */
+        height: 60%; /* Adjust map height for smaller screens */
+    }
+
+    .featurebase,
+    .by-levelsio {
+        bottom: 10px;
+        font-size: 16px;
+        padding: 8px 12px;
+    }
+
+    #second-section {
+        padding: 15px;
+    }
+}
+
+@media (max-width: 600px) {
+    #menu-bar nav ul {
+        flex-direction: row; /* Ensure inline layout even on smaller screens */
+        justify-content: flex-end; /* Align items to the right */
+        gap: 8px; /* Reduce gap for compact layout */
+    }
+
+    #menu-bar nav ul li a {
+        font-size: 16px; /* Adjust font size for small devices */
+        padding: 4px 8px;
+    }
+
+    #search-container {
+        width: 85%;
+        padding: 5px;
+        left: 6%;
+        transform: none;
+        top: 100px;
+    }
+
+    #search-bar {
+        width: 70%;
+    }
+
+    #search-button {
+        width: 25%;
+    }
+
+    #map {
+        width: 90%; /* Adjust map width for smaller screens */
+        height: 60%; /* Adjust map height for smaller screens */
     }
 
     .featurebase,
@@ -122,5 +271,9 @@ body {
         bottom: 10px;
         font-size: 14px;
         padding: 8px 12px;
+    }
+
+    #second-section {
+        padding: 15px;
     }
 }
