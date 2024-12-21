@@ -1,4 +1,3 @@
-Here’s the complete README file content you can copy and paste directly into a README.md file:
 
 # Schools and Pokie Funds Map
 
