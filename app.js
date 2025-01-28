@@ -493,3 +493,51 @@ document.addEventListener('click', (e) => {
         document.getElementById('autocomplete-dropdown').classList.remove('show');
     }
 });
+
+// Modal functionality
+function openModal(modalId) {
+    const modal = document.getElementById(modalId);
+    modal.classList.add('show');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeModal(modalId) {
+    const modal = document.getElementById(modalId);
+    modal.classList.remove('show');
+    document.body.style.overflow = '';
+}
+
+// Event listeners for modals
+document.getElementById('about-link').addEventListener('click', (e) => {
+    e.preventDefault();
+    openModal('about-modal');
+});
+
+document.getElementById('ai-grant-writer-link').addEventListener('click', (e) => {
+    e.preventDefault();
+    openModal('ai-grant-writer-modal');
+});
+
+// Close modal when clicking the close button or outside the modal
+document.querySelectorAll('.modal').forEach(modal => {
+    modal.querySelector('.close-modal').addEventListener('click', () => {
+        closeModal(modal.id);
+    });
+
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            closeModal(modal.id);
+        }
+    });
+});
+
+// Close modal with Escape key
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+        document.querySelectorAll('.modal').forEach(modal => {
+            if (modal.classList.contains('show')) {
+                closeModal(modal.id);
+            }
+        });
+    }
+});
