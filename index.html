@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Schools and Pokie Funds Map</title>
+    <title>Funding Org - Find Local School Funding</title>
     <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
@@ -14,34 +14,52 @@
                 💸 Funding Org
             </div>
             <ul>
-                <li><a href="#first-section">🏠 Home</a></li>
-                <li><a href="#second-section">ℹ️ About</a></li>
-                <li><a href="#search-container">🗺️ Map</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#properties">Properties</a></li>
+                <li><a href="#agents">Agents</a></li>
+                <li><a href="#blogs">Blogs</a></li>
+                <li><a href="#contact" class="contact-btn">Contact Us</a></li>
             </ul>
         </nav>
     </header>
 
-    <section id="first-section">
-        <div id="search-container">
-            <input type="text" id="search-bar" placeholder="Enter School Name">
-            <button id="search-button">Search 🔍</button>
-        </div>
-        <div id="map-container">
-            <div id="map" class="mapbox"></div>
-        </div>
-    </section>
+    <main>
+        <section id="hero">
+            <div class="tag">School Funding</div>
+            <h1>Find the funding that fits<br>your school <span class="highlight">perfectly</span></h1>
+            
+            <div class="search-container">
+                <div class="search-filters">
+                    <div class="search-input-group">
+                        <label for="search-bar" class="search-label">School</label>
+                        <input type="text" id="search-bar" placeholder="Search for school" autocomplete="off">
+                        <div id="autocomplete-dropdown" class="autocomplete-dropdown"></div>
+                        <button id="search-button" class="search-btn">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-    <section id="second-section">
-        <h1>Democratize grant funding for all schools.</h1>
-        <p> Find, connect, and access local grant funding sources. Save time and money to raise community funding for your local community needs. </p>
-        <p> 1️⃣ Find & Connect with Local Community Funding Sources.</p>
-        <p> 2️⃣ Screen and Fitler funding providers for the right projects.</p>
-        <p> 3️⃣ Use our Tools and AI to help craft your proposal.</p>
-    </section>
+        <section id="map-section">
+            <div id="map-container">
+                <div id="map" class="mapbox"></div>
+            </div>
+            <div id="results-panel">
+                <!-- Results will be dynamically inserted here -->
+            </div>
+        </section>
+    </main>
 
     <!-- Fixed Feedback Links -->
-    <a target="_blank" class="by-levelsio" href="https://x.com/levelsio">by @Peritos</a>
-    <a target="_blank" rel="noopener noreferrer" aria-label="Ideas and Bugs Feedback" class="featurebase" href="https://ideasandbugs.com/c/pietercom">💡 Ideas + 🪲 Bugs</a>
+    <div class="feedback-links">
+        <a target="_blank" class="by-levelsio" href="https://x.com/levelsio">by @Peritos</a>
+        <a target="_blank" rel="noopener noreferrer" aria-label="Ideas and Bugs Feedback" class="featurebase" href="https://ideasandbugs.com/c/pietercom">💡 Ideas + 🪲 Bugs</a>
+    </div>
 
     <!-- Include Mapbox GL JS -->
     <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>

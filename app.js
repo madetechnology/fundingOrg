@@ -5,8 +5,13 @@ mapboxgl.accessToken = 'pk.eyJ1IjoidGltbG9wZXptYWRlIiwiYSI6ImNseDM4aXp6cTB3MWEya
 const map = new mapboxgl.Map({
     container: 'map',
     style: 'mapbox://styles/mapbox/streets-v12',
-    center: [174.769673,-36.867787], // Default center (e.g., Auckland)
-    zoom: 10
+    center: [174.769673, -41.2], // Center of New Zealand
+    zoom: 5,
+    minZoom: 4, // Restrict zoom out level
+    maxBounds: [ // Restrict map panning to NZ area
+        [165.87, -47.3], // Southwest coordinates
+        [178.2, -34.4]  // Northeast coordinates
+    ]
 });
 
 // Add zoom and rotation controls to the map
@@ -40,9 +45,9 @@ fetch('data/schools.geojson')
     });
 
 // Load Pokie Funds GeoJSON
-fetch('data/pokie_funds.geojson')
+fetch('data/pokie_funds_full.geojson')
     .then(response => {
-        debugLog('Fetching pokie_funds.geojson');
+        debugLog('Fetching pokie_funds_full.geojson');
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
@@ -78,8 +83,12 @@ document.getElementById('search-button').addEventListener('click', () => {
     }
 
     // Find the school in the data
-    const school = schoolsData.features.find(feature => feature.properties.school_name === searchValue);
-    debugLog(`School found: ${school ? school.properties.school_name : 'None'}`);
+    const school = schoolsData.features.find(feature => {
+        if (!feature.properties) return false;
+        const schoolName = feature.properties["School Name"] || feature.properties["school_name"];
+        return schoolName && schoolName.toLowerCase() === searchValue.toLowerCase();
+    });
+    debugLog(`School found: ${school ? (school.properties["School Name"] || school.properties["school_name"]) : 'None'}`);
 
     if (!school) {
         alert('School not found.');
@@ -112,8 +121,8 @@ document.getElementById('search-button').addEventListener('click', () => {
     const selectedSchoolGeoJSON = {
         type: 'Feature',
         properties: {
-            school_name: school.properties.school_name,
-            address: school.properties.address
+            school_name: school.properties["School Name"] || school.properties["school_name"],
+            address: school.properties["Address"]
         },
         geometry: {
             type: 'Point',
@@ -182,11 +191,70 @@ document.getElementById('search-button').addEventListener('click', () => {
         type: "FeatureCollection",
         features: pokieFundsData.features.filter(fund => {
             const distance = getDistanceFromLatLonInKm(lat, lng, fund.geometry.coordinates[1], fund.geometry.coordinates[0]);
-            return distance <= 10; // 5 km radius
+            return distance <= 5; // Changed from 10 to 5 km radius
         })
     };
 
     debugLog(`Filtered Pokie Funds count within 5 km: ${filteredFunds.features.length}`);
+
+    // Update results panel with table
+    const resultsPanel = document.getElementById('results-panel');
+    
+    // Get unique foundations from the filtered results
+    const uniqueFoundations = [...new Set(filteredFunds.features.map(fund => fund.properties["Foundation"]))];
+
+    resultsPanel.innerHTML = `
+        <div class="results-header">
+            <h2>Nearby Funding Sources</h2>
+            <span class="results-count">${filteredFunds.features.length} found within 5km</span>
+        </div>
+        <table class="results-table">
+            <thead>
+                <tr>
+                    <th>Venue Name</th>
+                    <th>Foundation</th>
+                    <th>Address</th>
+                    <th>Distance</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${filteredFunds.features.map(fund => {
+                    const distance = getDistanceFromLatLonInKm(
+                        lat, lng,
+                        fund.geometry.coordinates[1],
+                        fund.geometry.coordinates[0]
+                    ).toFixed(1);
+                    return `
+                        <tr>
+                            <td>${fund.properties["Pub Name"] || 'N/A'}</td>
+                            <td>${fund.properties["Foundation"] || 'N/A'}</td>
+                            <td>${fund.properties["Address"] || 'N/A'}</td>
+                            <td>${distance} km</td>
+                        </tr>
+                    `;
+                }).join('')}
+            </tbody>
+        </table>
+
+        <div class="results-header" style="margin-top: 2rem;">
+            <h2>Available Foundations</h2>
+            <span class="results-count">${uniqueFoundations.length} foundations</span>
+        </div>
+        <table class="results-table foundations-table">
+            <thead>
+                <tr>
+                    <th>Foundation Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${uniqueFoundations.map(foundation => `
+                    <tr>
+                        <td>${foundation || 'N/A'}</td>
+                    </tr>
+                `).join('')}
+            </tbody>
+        </table>
+    `;
 
     // Add Pokie Funds source and layer if there are any filtered funds
     if (filteredFunds.features.length > 0) {
@@ -198,25 +266,37 @@ document.getElementById('search-button').addEventListener('click', () => {
 
         map.addLayer({
             id: 'filtered-pokie-funds-layer',
-            type: 'circle',
+            type: 'symbol',
             source: 'filtered_pokie_funds',
+            layout: {
+                'text-field': '$',
+                'text-size': 16,
+                'text-allow-overlap': true,
+                'text-ignore-placement': true,
+                'text-anchor': 'center'
+            },
             paint: {
-                'circle-radius': 6,
-                'circle-color': '#0000FF'
+                'text-color': '#4169E1',
+                'text-halo-color': '#ffffff',
+                'text-halo-width': 2
             }
         });
-        debugLog('Added filtered-pokie-funds-layer.');
+        debugLog('Added filtered-pokie-funds-layer with $ symbols.');
 
         // Add popups for filtered Pokie Funds
         map.on('click', 'filtered-pokie-funds-layer', (e) => {
             const coordinates = e.features[0].geometry.coordinates.slice();
-            const { fund_name, address } = e.features[0].properties;
+            const { "Pub Name": venueName, "Foundation": foundation, "Address": address } = e.features[0].properties;
 
             new mapboxgl.Popup()
                 .setLngLat(coordinates)
-                .setHTML(`<strong>${fund_name}</strong><br>${address}`)
+                .setHTML(`
+                    <strong>${venueName}</strong><br>
+                    ${foundation}<br>
+                    ${address}
+                `)
                 .addTo(map);
-            debugLog(`Popup displayed for Pokie Fund: ${fund_name}`);
+            debugLog(`Popup displayed for Pokie Fund: ${venueName}`);
         });
 
         // Change the cursor to pointer when hovering over filtered Pokie Funds
@@ -283,3 +363,133 @@ function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
 function deg2rad(deg) {
     return deg * (Math.PI / 180);
 }
+
+// Initialize the results panel with default state
+function initializeResultsPanel() {
+    const resultsPanel = document.getElementById('results-panel');
+    resultsPanel.innerHTML = `
+        <div class="results-header">
+            <h2>Nearby Funding Sources</h2>
+            <span class="results-count">No results yet</span>
+        </div>
+        <table class="results-table">
+            <thead>
+                <tr>
+                    <th>Venue Name</th>
+                    <th>Foundation</th>
+                    <th>Address</th>
+                    <th>Distance</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="empty-state">
+                    <td colspan="3">
+                        <div class="empty-message">
+                            Search for a school to find nearby funding sources
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    `;
+}
+
+// Call initialize function when the map is loaded
+map.on('load', () => {
+    initializeResultsPanel();
+    debugLog('Results panel initialized with default state');
+});
+
+let selectedIndex = -1;
+
+// Function to filter schools based on search input
+function filterSchools(searchText) {
+    if (!schoolsData || !searchText || searchText.length < 3) return [];
+    
+    const searchLower = searchText.toLowerCase();
+    return schoolsData.features
+        .filter(feature => {
+            const schoolName = feature.properties["School Name"] || feature.properties["school_name"];
+            return schoolName && schoolName.toLowerCase().includes(searchLower);
+        })
+        .slice(0, 10); // Limit to 10 results
+}
+
+// Function to update the dropdown
+function updateDropdown(searchText) {
+    const dropdown = document.getElementById('autocomplete-dropdown');
+    const matches = filterSchools(searchText);
+    
+    if (matches.length > 0 && searchText.length >= 3) {
+        dropdown.innerHTML = matches
+            .map((feature, index) => {
+                const schoolName = feature.properties["School Name"] || feature.properties["school_name"];
+                return `
+                    <div class="autocomplete-item ${index === selectedIndex ? 'selected' : ''}" 
+                         data-index="${index}">
+                        ${schoolName}
+                    </div>
+                `;
+            })
+            .join('');
+        dropdown.classList.add('show');
+    } else {
+        dropdown.innerHTML = '';
+        dropdown.classList.remove('show');
+    }
+}
+
+// Add input event listener for search bar
+document.getElementById('search-bar').addEventListener('input', (e) => {
+    const searchText = e.target.value.trim();
+    selectedIndex = -1;
+    updateDropdown(searchText);
+});
+
+// Handle keyboard navigation
+document.getElementById('search-bar').addEventListener('keydown', (e) => {
+    const dropdown = document.getElementById('autocomplete-dropdown');
+    const items = dropdown.getElementsByClassName('autocomplete-item');
+    
+    if (!items.length) return;
+
+    if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        selectedIndex = (selectedIndex + 1) % items.length;
+        updateDropdown(e.target.value.trim());
+        if (items[selectedIndex]) {
+            items[selectedIndex].scrollIntoView({ block: 'nearest' });
+        }
+    } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        selectedIndex = selectedIndex <= 0 ? items.length - 1 : selectedIndex - 1;
+        updateDropdown(e.target.value.trim());
+        if (items[selectedIndex]) {
+            items[selectedIndex].scrollIntoView({ block: 'nearest' });
+        }
+    } else if (e.key === 'Enter' && selectedIndex >= 0) {
+        e.preventDefault();
+        const selectedSchoolName = items[selectedIndex].textContent.trim();
+        document.getElementById('search-bar').value = selectedSchoolName;
+        dropdown.classList.remove('show');
+        document.getElementById('search-button').click();
+    }
+});
+
+// Handle click on dropdown items
+document.getElementById('autocomplete-dropdown').addEventListener('click', (e) => {
+    const item = e.target.closest('.autocomplete-item');
+    if (item) {
+        const schoolName = item.textContent.trim();
+        document.getElementById('search-bar').value = schoolName;
+        document.getElementById('autocomplete-dropdown').classList.remove('show');
+        document.getElementById('search-button').click();
+    }
+});
+
+// Close dropdown when clicking outside
+document.addEventListener('click', (e) => {
+    if (!e.target.closest('.search-input-group')) {
+        document.getElementById('autocomplete-dropdown').classList.remove('show');
+    }
+});
