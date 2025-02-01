@@ -122,31 +122,132 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Submit form function
-    function submitForm() {
+    async function submitForm() {
         // Collect all form data
         const formData = {
+            origin: 'https://www.funding.org.nz/create-proposal.html',
             grantType: document.getElementById('grantType').value,
             projectTitle: document.getElementById('projectTitle').value,
             projectDescription: document.getElementById('projectDescription').value,
-            goals: Array.from(document.querySelectorAll('input[name="goals"]:checked')).map(cb => cb.value),
-            beneficiaries: Array.from(document.querySelectorAll('input[name="beneficiaries"]:checked')).map(cb => cb.value),
-            outcomes: Array.from(document.querySelectorAll('input[name="outcomes"]:checked')).map(cb => cb.value),
-            specificGrades: specificGradesCheckbox.checked ? gradeSelect.value : 'All grades'
+            goals: Array.from(document.querySelectorAll('input[name="goals"]:checked')).map(cb => ({
+                id: cb.id,
+                value: cb.value,
+                label: cb.nextElementSibling.textContent.trim()
+            })),
+            beneficiaries: Array.from(document.querySelectorAll('input[name="beneficiaries"]:checked')).map(cb => ({
+                id: cb.id,
+                value: cb.value,
+                label: cb.nextElementSibling.textContent.trim()
+            })),
+            outcomes: Array.from(document.querySelectorAll('input[name="outcomes"]:checked')).map(cb => ({
+                id: cb.id,
+                value: cb.value,
+                label: cb.nextElementSibling.textContent.trim()
+            })),
+            specificGrades: specificGradesCheckbox.checked ? gradeSelect.value : 'All grades',
+            submittedAt: new Date().toISOString()
         };
 
-        // Show success message
-        const successMessage = document.createElement('div');
-        successMessage.className = 'success-message';
-        successMessage.innerHTML = `
-            <h3>Proposal Submitted Successfully!</h3>
-            <p>Thank you for submitting your proposal. We will review it and get back to you soon.</p>
-        `;
+        try {
+            // Show loading state
+            nextButton.disabled = true;
+            nextButton.textContent = 'Submitting...';
 
-        form.innerHTML = '';
-        form.appendChild(successMessage);
+            // Send data to webhook
+            const response = await fetch('https://hook.eu2.make.com/qh4mm3ml73o2icvrpqdcafirslrvonyu', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            });
 
-        // Log form data (replace with actual submission logic)
-        console.log('Form submitted:', formData);
+            if (!response.ok) {
+                throw new Error('Submission failed');
+            }
+
+            // Parse the response
+            const responseData = await response.json();
+
+            // Show success message with response data
+            const successMessage = document.createElement('div');
+            successMessage.className = 'success-message';
+            
+            // Check if we have a custom message from the webhook
+            const responseMessage = responseData.message || 'Thank you for submitting your proposal. We will review it and get back to you soon.';
+            const proposalId = responseData.proposalId || '';
+            const proposalSummary = responseData.proposalSummary || '';
+            
+            successMessage.innerHTML = `
+                <h3>Proposal Submitted Successfully!</h3>
+                <p>${responseMessage}</p>
+                ${proposalId ? `<p class="proposal-id">Proposal ID: ${proposalId}</p>` : ''}
+                ${proposalSummary ? `
+                    <div class="proposal-summary">
+                        <h4>Proposal Summary</h4>
+                        <div class="summary-text">
+                            ${proposalSummary.split('\n').map(paragraph => `<p>${paragraph}</p>`).join('')}
+                        </div>
+                    </div>
+                ` : ''}
+                <div class="success-actions" style="margin-top: 2rem;">
+                    <button onclick="window.location.href='index.html'" class="nav-button">Return to Home</button>
+                    ${responseData.nextSteps ? `<p class="next-steps">${responseData.nextSteps}</p>` : ''}
+                </div>
+            `;
+
+            // Add styles for the proposal summary
+            const style = document.createElement('style');
+            style.textContent = `
+                .proposal-summary {
+                    margin-top: 2rem;
+                    padding: 2rem;
+                    background: #f8fafc;
+                    border-radius: 8px;
+                    border: 1px solid #e2e8f0;
+                }
+
+                .proposal-summary h4 {
+                    color: #4169E1;
+                    font-size: 1.2rem;
+                    margin-bottom: 1rem;
+                }
+
+                .summary-text p {
+                    margin-bottom: 1rem;
+                    line-height: 1.6;
+                    color: #1a1a1a;
+                }
+
+                .summary-text p:last-child {
+                    margin-bottom: 0;
+                }
+            `;
+            document.head.appendChild(style);
+
+            form.innerHTML = '';
+            form.appendChild(successMessage);
+
+        } catch (error) {
+            console.error('Submission error:', error);
+            
+            // Show error message
+            const errorMessage = document.createElement('div');
+            errorMessage.className = 'error-message';
+            errorMessage.innerHTML = `
+                <h3>Submission Failed</h3>
+                <p>There was an error submitting your proposal. Please try again later.</p>
+                <button onclick="window.location.reload()" class="nav-button" style="margin-top: 1rem;">Try Again</button>
+            `;
+
+            // Re-enable submit button
+            nextButton.disabled = false;
+            nextButton.textContent = 'Submit';
+
+            form.innerHTML = '';
+            form.appendChild(errorMessage);
+        }
     }
 
     // Initialize the form
