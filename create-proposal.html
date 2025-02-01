@@ -3,21 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create a Proposal - Funding Org</title>
-    <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet">
+    <title>Create Proposal - Funding Org</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="proposal.css">
 </head>
 <body>
-    <header id="menu-bar">
-        <nav>
-            <div id="logo">
-                💸 Funding Org
+    <header class="site-header">
+        <nav class="nav-container">
+            <div class="logo">
+                <a href="index.html">Funding Org</a>
             </div>
-            <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="#" id="about-link">About</a></li>
-                <li><a href="#" id="ai-grant-writer-link">AI Grant Writer</a></li>
+            <ul class="nav-links">
+                <li><a href="#" class="about-btn">About</a></li>
+                <li><a href="#" class="ai-grant-btn">AI Grant Writer</a></li>
+                <li><a href="create-proposal.html" class="proposal-btn">Create Proposal</a></li>
                 <li><a href="mailto:hello@funding.org.nz" class="contact-btn">Contact Us</a></li>
             </ul>
         </nav>
@@ -25,198 +24,149 @@
 
     <main class="proposal-main">
         <div class="proposal-container">
-            <h1>Create a Proposal</h1>
-            <form id="proposalForm" class="proposal-form">
-                <!-- Grant Type Section -->
-                <div class="form-section">
-                    <h2>Grant Type</h2>
-                    <select name="grantType" id="grantType" required>
-                        <option value="">Select a grant type</option>
-                        <option value="educational">Educational resources</option>
-                        <option value="sports">Sports equipment</option>
-                        <option value="technology">Technology upgrades</option>
-                        <option value="facility">Facility improvements</option>
-                        <option value="arts">Arts and culture programs</option>
-                        <option value="special_needs">Special needs support</option>
-                        <option value="community">Community outreach initiatives</option>
+            <div class="progress-bar">
+                <div class="progress-fill"></div>
+            </div>
+            
+            <div class="step-navigation">
+                <button class="nav-button prev-step">Previous</button>
+                <span class="step-indicator">Step 1 of 5</span>
+                <button class="nav-button next-step">Next</button>
+            </div>
+
+            <form id="proposalForm" class="steps-container">
+                <!-- Step 1: Grant Type -->
+                <div class="form-step">
+                    <h2>What type of grant are you applying for?</h2>
+                    <p class="step-description">Select the grant type that best matches your project's goals and requirements.</p>
+                    <select id="grantType" required>
+                        <option value="">Select a grant type...</option>
+                        <option value="education">Education Innovation Grant</option>
+                        <option value="community">Community Development Grant</option>
+                        <option value="technology">Technology Integration Grant</option>
+                        <option value="research">Educational Research Grant</option>
                     </select>
                 </div>
 
-                <!-- Project Details Section -->
-                <div class="form-section">
-                    <h2>Project Details</h2>
-                    
-                    <label for="projectTitle">Project Title</label>
-                    <input type="text" id="projectTitle" name="projectTitle" required>
-                    
-                    <label for="projectDescription">Brief Project Description (150-200 words)</label>
-                    <textarea id="projectDescription" name="projectDescription" rows="5" 
-                        minlength="150" maxlength="1000" required></textarea>
-                    <div class="word-count">Words: <span id="wordCount">0</span>/200</div>
-                    
-                    <label>Project Goals and Objectives</label>
-                    <div class="checkbox-group" id="goalsGroup">
+                <!-- Step 2: Project Details -->
+                <div class="form-step">
+                    <h2>Tell us about your project</h2>
+                    <p class="step-description">Provide a clear and concise description of your project (100-500 words).</p>
+                    <input type="text" id="projectTitle" placeholder="Project Title" required>
+                    <textarea id="projectDescription" rows="6" placeholder="Describe your project..." required></textarea>
+                    <div id="wordCount" class="word-count">0 words</div>
+                </div>
+
+                <!-- Step 3: Project Goals -->
+                <div class="form-step">
+                    <h2>What are your project's goals?</h2>
+                    <p class="step-description">Select all that apply to your project.</p>
+                    <div class="checkbox-group">
                         <div class="checkbox-item">
-                            <input type="checkbox" id="goal1" name="goals" value="academic">
-                            <label for="goal1">Improve student academic performance</label>
+                            <input type="checkbox" id="goal1" name="goals" value="improve_learning">
+                            <label for="goal1">Improve student learning outcomes</label>
                         </div>
                         <div class="checkbox-item">
-                            <input type="checkbox" id="goal2" name="goals" value="extracurricular">
-                            <label for="goal2">Enhance extracurricular activities</label>
+                            <input type="checkbox" id="goal2" name="goals" value="enhance_teaching">
+                            <label for="goal2">Enhance teaching methodologies</label>
                         </div>
                         <div class="checkbox-item">
-                            <input type="checkbox" id="goal3" name="goals" value="facilities">
-                            <label for="goal3">Upgrade school facilities</label>
+                            <input type="checkbox" id="goal3" name="goals" value="technology_integration">
+                            <label for="goal3">Integrate innovative technology</label>
                         </div>
                         <div class="checkbox-item">
-                            <input type="checkbox" id="goal4" name="goals" value="technology">
-                            <label for="goal4">Increase access to technology</label>
+                            <input type="checkbox" id="goal4" name="goals" value="community_engagement">
+                            <label for="goal4">Increase community engagement</label>
                         </div>
                         <div class="checkbox-item">
-                            <input type="checkbox" id="goal5" name="goals" value="wellbeing">
-                            <label for="goal5">Promote student well-being and mental health</label>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="goal6" name="goals" value="community">
-                            <label for="goal6">Foster community engagement</label>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="goal7" name="goals" value="special_needs">
-                            <label for="goal7">Support special needs education</label>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="goal8" name="goals" value="environmental">
-                            <label for="goal8">Advance environmental sustainability initiatives</label>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="goal9" name="goals" value="professional">
-                            <label for="goal9">Develop teacher professional skills</label>
-                        </div>
-                        <div class="custom-goal-input">
-                            <input type="text" id="customGoal" name="customGoal" placeholder="Add custom goal">
-                            <button type="button" id="addCustomGoal" class="secondary-button">Add</button>
+                            <input type="checkbox" id="goal5" name="goals" value="professional_development">
+                            <label for="goal5">Support professional development</label>
                         </div>
                     </div>
                 </div>
 
-                <!-- Target Beneficiaries Section -->
-                <div class="form-section">
-                    <h2>Target Beneficiaries</h2>
-                    <div class="checkbox-group" id="beneficiariesGroup">
+                <!-- Step 4: Target Beneficiaries -->
+                <div class="form-step">
+                    <h2>Who will benefit from your project?</h2>
+                    <p class="step-description">Select your target beneficiaries and specify grade levels if applicable.</p>
+                    <div class="checkbox-group">
                         <div class="checkbox-item">
-                            <input type="checkbox" id="ben1" name="beneficiaries" value="entire_school">
-                            <label for="ben1">Entire school</label>
+                            <input type="checkbox" id="ben1" name="beneficiaries" value="students">
+                            <label for="ben1">Students</label>
                         </div>
                         <div class="checkbox-item">
-                            <input type="checkbox" id="ben2" name="beneficiaries" value="specific_grades">
-                            <label for="ben2">Specific grade levels</label>
-                            <select id="gradeSelect" class="nested-select" disabled>
-                                <option value="">Select grades</option>
-                                <option value="year1-6">Years 1-6</option>
-                                <option value="year7-8">Years 7-8</option>
-                                <option value="year9-10">Years 9-10</option>
-                                <option value="year11-13">Years 11-13</option>
-                            </select>
+                            <input type="checkbox" id="specificGradesCheckbox" name="beneficiaries" value="specific_grades">
+                            <label for="specificGradesCheckbox">Specific Grade Levels</label>
+                        </div>
+                        <select id="gradeSelect" disabled>
+                            <option value="elementary">Elementary (Years 1-6)</option>
+                            <option value="intermediate">Intermediate (Years 7-8)</option>
+                            <option value="secondary">Secondary (Years 9-13)</option>
+                        </select>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="ben3" name="beneficiaries" value="teachers">
+                            <label for="ben3">Teachers</label>
                         </div>
                         <div class="checkbox-item">
-                            <input type="checkbox" id="ben3" name="beneficiaries" value="special_needs">
-                            <label for="ben3">Students with special needs</label>
+                            <input type="checkbox" id="ben4" name="beneficiaries" value="parents">
+                            <label for="ben4">Parents</label>
                         </div>
                         <div class="checkbox-item">
-                            <input type="checkbox" id="ben4" name="beneficiaries" value="gifted">
-                            <label for="ben4">Gifted and talented students</label>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="ben5" name="beneficiaries" value="staff">
-                            <label for="ben5">Teachers and staff</label>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="ben6" name="beneficiaries" value="community">
-                            <label for="ben6">Local community</label>
-                        </div>
-                        <div class="custom-beneficiary-input">
-                            <input type="text" id="customBeneficiary" name="customBeneficiary" placeholder="Add custom beneficiary group">
-                            <button type="button" id="addCustomBeneficiary" class="secondary-button">Add</button>
+                            <input type="checkbox" id="ben5" name="beneficiaries" value="community">
+                            <label for="ben5">Community Members</label>
                         </div>
                     </div>
                 </div>
 
-                <!-- Expected Outcomes Section -->
-                <div class="form-section">
-                    <h2>Expected Outcomes and Impact</h2>
-                    <div class="checkbox-group" id="outcomesGroup">
+                <!-- Step 5: Expected Outcomes -->
+                <div class="form-step">
+                    <h2>What outcomes do you expect?</h2>
+                    <p class="step-description">Select the expected outcomes and impact of your project.</p>
+                    <div class="checkbox-group">
                         <div class="checkbox-item">
-                            <input type="checkbox" id="out1" name="outcomes" value="academic">
-                            <label for="out1">Improved test scores or academic achievements</label>
+                            <input type="checkbox" id="outcome1" name="outcomes" value="academic_improvement">
+                            <label for="outcome1">Improved academic performance</label>
                         </div>
                         <div class="checkbox-item">
-                            <input type="checkbox" id="out2" name="outcomes" value="engagement">
-                            <label for="out2">Increased student engagement and participation</label>
+                            <input type="checkbox" id="outcome2" name="outcomes" value="engagement">
+                            <label for="outcome2">Increased student engagement</label>
                         </div>
                         <div class="checkbox-item">
-                            <input type="checkbox" id="out3" name="outcomes" value="environment">
-                            <label for="out3">Enhanced learning environment</label>
+                            <input type="checkbox" id="outcome3" name="outcomes" value="skills">
+                            <label for="outcome3">Enhanced 21st-century skills</label>
                         </div>
                         <div class="checkbox-item">
-                            <input type="checkbox" id="out4" name="outcomes" value="equipment">
-                            <label for="out4">Better equipped classrooms or facilities</label>
+                            <input type="checkbox" id="outcome4" name="outcomes" value="collaboration">
+                            <label for="outcome4">Better collaboration and communication</label>
                         </div>
                         <div class="checkbox-item">
-                            <input type="checkbox" id="out5" name="outcomes" value="health">
-                            <label for="out5">Improved student health and well-being</label>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="out6" name="outcomes" value="community">
-                            <label for="out6">Stronger school-community relationships</label>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="out7" name="outcomes" value="teaching">
-                            <label for="out7">Increased teacher effectiveness</label>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="out8" name="outcomes" value="environmental">
-                            <label for="out8">Reduced environmental footprint</label>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="out9" name="outcomes" value="inclusivity">
-                            <label for="out9">Greater inclusivity and accessibility</label>
-                        </div>
-                        <div class="custom-outcome-input">
-                            <input type="text" id="customOutcome" name="customOutcome" placeholder="Add custom outcome/impact">
-                            <button type="button" id="addCustomOutcome" class="secondary-button">Add</button>
+                            <input type="checkbox" id="outcome5" name="outcomes" value="innovation">
+                            <label for="outcome5">Innovative teaching practices</label>
                         </div>
                     </div>
-                </div>
-
-                <div class="form-actions">
-                    <button type="submit" class="primary-button">Create Proposal</button>
-                    <button type="button" class="secondary-button" onclick="window.location.href='index.html'">Cancel</button>
                 </div>
             </form>
         </div>
     </main>
 
-    <!-- Footer -->
     <footer class="site-footer">
         <div class="footer-content">
             <div class="footer-section">
                 <h3>Funding Org</h3>
-                <p>Empowering New Zealand schools to access community funding opportunities.</p>
+                <p>Empowering education through innovative funding solutions.</p>
             </div>
             <div class="footer-section">
                 <h3>Quick Links</h3>
                 <ul>
-                    <li><a href="#" id="footer-about">About Us</a></li>
-                    <li><a href="#" id="footer-ai-grant">AI Grant Writer</a></li>
+                    <li><a href="#" class="footer-about">About Us</a></li>
+                    <li><a href="#" class="footer-ai-grant">AI Grant Writer</a></li>
                     <li><a href="mailto:hello@funding.org.nz">Contact Us</a></li>
                 </ul>
             </div>
             <div class="footer-section">
                 <h3>Contact</h3>
-                <ul class="contact-info">
-                    <li>📧 hello@funding.org.nz</li>
-                    <li>🌏 New Zealand</li>
-                </ul>
+                <p>Email: hello@funding.org.nz</p>
+                <p>Location: Wellington, New Zealand</p>
             </div>
         </div>
         <div class="footer-bottom">
@@ -224,6 +174,7 @@
         </div>
     </footer>
 
+    <script src="app.js"></script>
     <script src="proposal.js"></script>
 </body>
 </html> 
