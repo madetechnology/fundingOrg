@@ -541,3 +541,14 @@ document.addEventListener('keydown', (e) => {
         });
     }
 });
+
+// Footer modal links
+document.getElementById('footer-about').addEventListener('click', (e) => {
+    e.preventDefault();
+    openModal('about-modal');
+});
+
+document.getElementById('footer-ai-grant').addEventListener('click', (e) => {
+    e.preventDefault();
+    openModal('ai-grant-writer-modal');
+});
