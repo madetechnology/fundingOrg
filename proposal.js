@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let currentStep = 0;
 
     // Initialize the form
+    // Updated 
     function initForm() {
         showStep(currentStep);
         updateNavigation();
