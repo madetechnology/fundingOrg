@@ -171,36 +171,28 @@ document.addEventListener('DOMContentLoaded', function() {
             submittedAt: new Date().toISOString()
         };
 
-        try {
-            // Show loading state
-            nextButton.disabled = true;
-            nextButton.textContent = 'Submitting...';
+        // Show loading state
+        nextButton.disabled = true;
+        nextButton.textContent = 'Submitting...';
 
-            // Send data to webhook
-            const response = await fetch('https://hook.eu2.make.com/qh4mm3ml73o2icvrpqdcafirslrvonyu', {
+        try {
+            // Fire and forget webhook
+            fetch('https://hook.eu2.make.com/qh4mm3ml73o2icvrpqdcafirslrvonyu', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'Accept': 'application/json'
                 },
                 body: JSON.stringify(formData)
-            });
+            }).catch(error => console.log('Webhook error:', error)); // Just log any webhook errors
 
-            if (!response.ok) {
-                throw new Error('Submission failed');
-            }
-
-            // Parse the response
-            const responseData = await response.json();
-
-            // Show success message with response data
+            // Show success message immediately
             const successMessage = document.createElement('div');
             successMessage.className = 'success-message';
             
             successMessage.innerHTML = `
                 <h3>Congratulations on creating your first proposal!</h3>
                 <p>To access this proposal, simply click the verification link in your email which will confirm your account.</p>
-                ${responseData.proposalId ? `<p class="proposal-id">Proposal ID: ${responseData.proposalId}</p>` : ''}
                 <div class="email-verification-notice">
                     <p>We've sent a verification email to: <strong>${formData.email}</strong></p>
                     <p class="verification-hint">Please check your inbox and click the verification link to complete the process.</p>
@@ -269,7 +261,7 @@ document.addEventListener('DOMContentLoaded', function() {
             form.appendChild(successMessage);
 
         } catch (error) {
-            console.error('Submission error:', error);
+            console.error('Error:', error);
             
             // Show error message
             const errorMessage = document.createElement('div');
