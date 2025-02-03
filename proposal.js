@@ -56,6 +56,27 @@ document.addEventListener('DOMContentLoaded', function() {
             } else {
                 input.classList.remove('error');
             }
+
+            // Email validation for the email step
+            if (input.type === 'email' && input.value.trim()) {
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(input.value.trim())) {
+                    isValid = false;
+                    input.classList.add('error');
+                    const errorMsg = document.createElement('p');
+                    errorMsg.className = 'error-message';
+                    errorMsg.textContent = 'Please enter a valid email address';
+                    if (!input.nextElementSibling?.classList.contains('error-message')) {
+                        input.parentNode.insertBefore(errorMsg, input.nextSibling);
+                    }
+                } else {
+                    input.classList.remove('error');
+                    const existingError = input.nextElementSibling;
+                    if (existingError?.classList.contains('error-message')) {
+                        existingError.remove();
+                    }
+                }
+            }
         });
 
         // Special validation for word count if it's the project description step
@@ -127,6 +148,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // Collect all form data
         const formData = {
             origin: 'https://www.funding.org.nz/create-proposal.html',
+            email: document.getElementById('userEmail').value,
             grantType: document.getElementById('grantType').value,
             projectTitle: document.getElementById('projectTitle').value,
             projectDescription: document.getElementById('projectDescription').value,
@@ -175,54 +197,70 @@ document.addEventListener('DOMContentLoaded', function() {
             const successMessage = document.createElement('div');
             successMessage.className = 'success-message';
             
-            // Check if we have a custom message from the webhook
-            const responseMessage = responseData.message || 'Thank you for submitting your proposal. We will review it and get back to you soon.';
-            const proposalId = responseData.proposalId || '';
-            const proposalSummary = responseData.proposalSummary || '';
-            
             successMessage.innerHTML = `
-                <h3>Proposal Submitted Successfully!</h3>
-                <p>${responseMessage}</p>
-                ${proposalId ? `<p class="proposal-id">Proposal ID: ${proposalId}</p>` : ''}
-                ${proposalSummary ? `
-                    <div class="proposal-summary">
-                        <h4>Proposal Summary</h4>
-                        <div class="summary-text">
-                            ${proposalSummary.split('\n').map(paragraph => `<p>${paragraph}</p>`).join('')}
-                        </div>
-                    </div>
-                ` : ''}
+                <h3>Congratulations on creating your first proposal!</h3>
+                <p>To access this proposal, simply click the verification link in your email which will confirm your account.</p>
+                ${responseData.proposalId ? `<p class="proposal-id">Proposal ID: ${responseData.proposalId}</p>` : ''}
+                <div class="email-verification-notice">
+                    <p>We've sent a verification email to: <strong>${formData.email}</strong></p>
+                    <p class="verification-hint">Please check your inbox and click the verification link to complete the process.</p>
+                </div>
                 <div class="success-actions" style="margin-top: 2rem;">
                     <button onclick="window.location.href='index.html'" class="nav-button">Return to Home</button>
-                    ${responseData.nextSteps ? `<p class="next-steps">${responseData.nextSteps}</p>` : ''}
                 </div>
             `;
 
-            // Add styles for the proposal summary
+            // Add styles for the success message
             const style = document.createElement('style');
             style.textContent = `
-                .proposal-summary {
-                    margin-top: 2rem;
+                .success-message {
+                    text-align: center;
                     padding: 2rem;
-                    background: #f8fafc;
-                    border-radius: 8px;
-                    border: 1px solid #e2e8f0;
                 }
 
-                .proposal-summary h4 {
+                .success-message h3 {
                     color: #4169E1;
-                    font-size: 1.2rem;
+                    font-size: 1.8rem;
                     margin-bottom: 1rem;
                 }
 
-                .summary-text p {
-                    margin-bottom: 1rem;
-                    line-height: 1.6;
+                .success-message p {
                     color: #1a1a1a;
+                    opacity: 0.8;
+                    font-size: 1.1rem;
+                    line-height: 1.6;
                 }
 
-                .summary-text p:last-child {
-                    margin-bottom: 0;
+                .email-verification-notice {
+                    margin: 2rem 0;
+                    padding: 1.5rem;
+                    background: #EEF2FF;
+                    border-radius: 8px;
+                }
+
+                .verification-hint {
+                    font-size: 0.9rem;
+                    margin-top: 0.5rem;
+                    color: #4169E1;
+                }
+
+                .success-actions {
+                    margin-top: 2rem;
+                }
+
+                .success-actions .nav-button {
+                    display: inline-block;
+                    padding: 0.75rem 1.5rem;
+                    background: #4169E1;
+                    color: white;
+                    border-radius: 8px;
+                    text-decoration: none;
+                    transition: all 0.2s ease;
+                }
+
+                .success-actions .nav-button:hover {
+                    background: #3451B2;
+                    transform: translateY(-1px);
                 }
             `;
             document.head.appendChild(style);

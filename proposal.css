@@ -385,4 +385,50 @@
         width: 100%;
         margin-left: 0;
     }
+}
+
+/* Email Verification Step */
+.email-input-container {
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.email-hint {
+    font-size: 0.9rem;
+    color: var(--text-color);
+    opacity: 0.7;
+    margin-top: 0.5rem;
+    text-align: center;
+}
+
+#userEmail {
+    width: 100%;
+    padding: 1rem;
+    border: 2px solid #E2E8F0;
+    border-radius: var(--border-radius);
+    font-size: 1.1rem;
+    text-align: center;
+    transition: var(--transition);
+}
+
+#userEmail:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(65, 105, 225, 0.1);
+}
+
+/* Error Message Styles */
+.error-message {
+    color: #e53e3e;
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+    text-align: center;
+}
+
+input.error {
+    border-color: #e53e3e !important;
+}
+
+input.error:focus {
+    box-shadow: 0 0 0 3px rgba(229, 62, 62, 0.1) !important;
 } 
